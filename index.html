@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="nb">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NTNUTVEKSLING – Fagtilsvar</title>
+  <meta name="description" content="Del erfaringer fra utveksling: hvilke NTNU-emner tilsvarer hvilke emner ved utenlandske universiteter." />
+  <style>
+    /* ====== Design (NTNU-inspirert, minimalt) ====== */
+    :root{
+      --ntnu-blue:#00509E;
+      --ntnu-blue-600:#003F7A;
+      --ink:#0B0C0C;
+      --muted:#6B7280;
+      --bg:#F8FAFC;
+      --card:#FFFFFF;
+      --ok:#0F8B2C;
+      --warn:#B45309;
+      --radius:12px;
+      --shadow:0 8px 24px rgba(0,0,0,.08);
+      color-scheme: light dark;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg:#0B1220;
+        --card:#0F172A;
+        --ink:#E5E7EB;
+        --muted:#9CA3AF;
+        --shadow:0 8px 24px rgba(0,0,0,.35);
+      }
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+    }
+    a{color:var(--ntnu-blue); text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:1080px;margin:auto;padding:16px}
+    header.app{
+      position:sticky; top:0; z-index:10;
+      backdrop-filter:saturate(140%) blur(8px);
+      background:color-mix(in lab, var(--bg), transparent 20%);
+      border-bottom:1px solid color-mix(in lab, var(--muted), transparent 70%);
+    }
+    .brand{display:flex;gap:10px;align-items:center}
+    .logo{
+      width:36px;height:36px;border-radius:8px;
+      background:var(--ntnu-blue); display:grid; place-items:center; color:#fff;
+      font-weight:700; box-shadow:var(--shadow);
+    }
+    nav{display:flex;gap:8px;flex-wrap:wrap}
+    .row{display:flex;justify-content:space-between;align-items:center;gap:16px}
+    .btn{
+      appearance:none; border:1px solid transparent; padding:.65rem .9rem; border-radius:10px;
+      background:var(--ntnu-blue); color:#fff; font-weight:600; cursor:pointer;
+      box-shadow:0 2px 0 color-mix(in lab, #000, transparent 75%);
+    }
+    .btn.ghost{background:transparent;border-color:color-mix(in lab, var(--ntnu-blue), #fff 60%);color:var(--ntnu-blue)}
+    .btn.min{padding:.45rem .7rem;border-radius:8px;font-weight:600}
+    .btn:focus{outline:3px solid color-mix(in lab, var(--ntnu-blue), #fff 60%); outline-offset:2px}
+    .pill{padding:.25rem .5rem;border-radius:99px;background:color-mix(in lab, var(--ntnu-blue), #fff 85%);color:var(--ntnu-blue);font-weight:600;font-size:.8rem}
+    main{padding-block:18px}
+    .grid{display:grid;gap:16px}
+    .cols{grid-template-columns: 1fr}
+    @media (min-width:900px){ .cols{grid-template-columns: 380px 1fr} }
+    .card{
+      background:var(--card); border:1px solid color-mix(in lab, var(--muted), transparent 75%);
+      border-radius:var(--radius); padding:16px; box-shadow:var(--shadow);
+    }
+    h1{font-size:1.6rem;margin:.6rem 0}
+    h2{font-size:1.2rem;margin:0 0 .5rem 0}
+    .muted{color:var(--muted)}
+    .fine{font-size:.92rem}
+    form label{display:block;font-weight:600;margin-top:.75rem}
+    input,select,textarea{
+      width:100%; padding:.7rem .8rem; border-radius:10px; border:1px solid color-mix(in lab, var(--muted), #fff 70%);
+      background:transparent; color:inherit;
+    }
+    input:focus,select:focus,textarea:focus{outline:3px solid color-mix(in lab, var(--ntnu-blue), #fff 65%); border-color:var(--ntnu-blue);}
+    .row-form{display:grid;gap:10px}
+    @media (min-width:720px){ .row-form{grid-template-columns:1fr 1fr} }
+    .hint{font-size:.85rem;color:var(--muted);margin-top:.25rem}
+    .table{
+      width:100%; border-collapse:collapse; font-size:.95rem;
+    }
+    .table th,.table td{padding:.65rem .6rem; border-bottom:1px solid color-mix(in lab, var(--muted), transparent 70%)}
+    .table th{text-align:left;font-weight:700}
+    .tags{display:flex;gap:6px;flex-wrap:wrap}
+    .tag{background:color-mix(in lab, var(--muted), #fff 85%);color:var(--ink);padding:.2rem .5rem;border-radius:999px;font-size:.78rem}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .toast{
+      position:fixed; right:16px; bottom:16px; background:var(--card); border:1px solid color-mix(in lab, var(--muted), transparent 70%);
+      padding:12px 14px; border-radius:10px; box-shadow:var(--shadow); display:none;
+    }
+    .toast.show{display:block}
+    .footer-note{font-size:.85rem;color:var(--muted);margin-top:8px}
+    .status{display:flex;gap:6px;align-items:center}
+    .status .dot{width:8px;height:8px;border-radius:50%;background:var(--ok)}
+    .danger{color:#B91C1C}
+    .empty{border:2px dashed color-mix(in lab, var(--muted), #fff 60%); border-radius:12px; padding:20px; text-align:center}
+  </style>
+</head>
+<body>
+  <header class="app">
+    <div class="wrap row">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">N</div>
+        <div>
+          <strong>NTNUTVEKSLING</strong><br/>
+          <span class="muted fine">Studentdrevet fagtilsvar</span>
+        </div>
+      </div>
+      <nav class="toolbar">
+        <button class="btn min ghost" id="navAdd">Legg til</button>
+        <button class="btn min ghost" id="navBrowse">Søk & filtrer</button>
+        <span class="pill" id="userBadge" title="Innlogget bruker">Ikke innlogget</span>
+        <button class="btn min" id="navProfile">Profil / Innlogging</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap grid cols" id="app" hidden>
+    <!-- Venstre kolonne: Innsending -->
+    <section class="card" id="pane-add">
+      <h2>Legg til erfaring</h2>
+      <p class="fine muted">Fyll inn universitetet øverst. Land settes automatisk. Velg anonym deling om ønskelig.</p>
+      <form id="addForm" autocomplete="on">
+        <label for="uni">Universitet</label>
+        <input list="uniList" id="uni" name="uni" placeholder="f.eks. Korea University" required />
+        <datalist id="uniList"></datalist>
+
+        <div class="row-form">
+          <div>
+            <label for="country">Land</label>
+            <select id="country" name="country" required></select>
+            <div class="hint" id="countryHint">Velges automatisk når universitet gjenkjennes.</div>
+          </div>
+          <div>
+            <label for="semester">Semester (valgfritt)</label>
+            <input id="semester" name="semester" placeholder="f.eks. V2024 / H2025" />
+          </div>
+        </div>
+
+        <div class="row-form">
+          <div>
+            <label for="ntnuCode">NTNU fagkode</label>
+            <input id="ntnuCode" name="ntnuCode" placeholder="f.eks. TDT4100" required />
+          </div>
+          <div>
+            <label for="ntnuName">NTNU fagnavn</label>
+            <input id="ntnuName" name="ntnuName" placeholder="Objektorientert programmering" required />
+          </div>
+        </div>
+
+        <div class="row-form">
+          <div>
+            <label for="foreignCode">Utenlandsk fagkode</label>
+            <input id="foreignCode" name="foreignCode" placeholder="f.eks. CS61A" required />
+          </div>
+          <div>
+            <label for="foreignName">Utenlandsk fagnavn</label>
+            <input id="foreignName" name="foreignName" placeholder="Structure & Interpretation of Computer Programs" required />
+          </div>
+        </div>
+
+        <div class="row-form">
+          <div>
+            <label for="anonymous">Del anonymt?</label>
+            <select id="anonymous" name="anonymous">
+              <option value="yes">Ja, anonymt</option>
+              <option value="no">Nei, vis kontakt</option>
+            </select>
+          </div>
+          <div id="contactWrap">
+            <label for="contact">Kontakt-epost (vises hvis ikke anonym)</label>
+            <input id="contact" name="contact" type="email" placeholder="ntnu-epost eller annen epost" />
+          </div>
+        </div>
+
+        <label for="notes">Merknader (valgfritt)</label>
+        <textarea id="notes" name="notes" rows="3" placeholder="Kort om overlapp, nivå, eksamensform, etc."></textarea>
+
+        <div class="row" style="margin-top:12px">
+          <button class="btn" type="submit">Publiser erfaring</button>
+          <button class="btn ghost" type="reset" id="resetBtn">Nullstill</button>
+        </div>
+
+        <p class="footer-note">
+          ⚠️ Dette er studentgenerert og uoffisielt. Sjekk alltid med NTNU/Instituttet før endelig godkjenning.
+        </p>
+      </form>
+    </section>
+
+    <!-- Høyre kolonne: Søk/filtrering & liste -->
+    <section class="card" id="pane-browse">
+      <h2>Søk & filtrer</h2>
+      <div class="toolbar" style="margin-bottom:10px">
+        <input id="q" placeholder="Søk i universitet, fagkode, fagnavn…" />
+        <select id="filterCountry"><option value="">Alle land</option></select>
+        <select id="filterUni"><option value="">Alle universiteter</option></select>
+        <button class="btn min ghost" id="exportBtn" title="Last ned data som JSON">Eksporter</button>
+        <button class="btn min ghost" id="clearBtn" title="Tøm alle lokale data">Tøm lokale data</button>
+      </div>
+
+      <div id="listWrap">
+        <table class="table" id="table">
+          <thead>
+            <tr>
+              <th>Universitet</th>
+              <th>Land</th>
+              <th>NTNU fag</th>
+              <th>Utenlandsfag</th>
+              <th>Semester</th>
+              <th>Bidratt av</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+        <div class="empty" id="empty" hidden>Ingen treff enda. Legg til din første erfaring! 🎓</div>
+      </div>
+    </section>
+  </main>
+  <!-- Profil / innlogging (vises først hvis ikke innlogget) -->
+  <section class="wrap card" id="authCard">
+    <h1>Kom i gang</h1>
+    <p class="fine muted">Lag en enkel profil for å poste erfaringer (kan fortsatt publisere anonymt per innslag).</p>
+    <form id="authForm">
+      <div class="row-form">
+        <div>
+          <label for="fullName">Navn</label>
+          <input id="fullName" required placeholder="Ditt navn" />
+        </div>
+        <div>
+          <label for="email">E-post</label>
+          <input id="email" type="email" required placeholder="fornavn.etternavn@ntnu.no (eller annen)" />
+        </div>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button class="btn" type="submit">Opprett / Logg inn</button>
+        <button class="btn ghost" type="button" id="skipLogin">Fortsett uten å lagre profil</button>
+      </div>
+      <p class="footer-note">Vi lagrer kun lokalt i nettleseren (LocalStorage). Ingen server er koblet til denne prototypen.</p>
+    </form>
+  </section>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    // ====== Minimal "app state" i LocalStorage ======
+    const LS = {
+      user: 'ntnutveksling_user',
+      entries: 'ntnutveksling_entries',
+      uniMap: 'ntnutveksling_unimap'
+    };
+
+    // Forvalg: noen universiteter -> land (på norsk)
+    const seedUniMap = {
+      "Korea University":"Sør-Korea",
+      "Seoul National University":"Sør-Korea",
+      "KAIST":"Sør-Korea",
+      "Yonsei University":"Sør-Korea",
+      "Technical University of Munich (TUM)":"Tyskland",
+      "Ludwig-Maximilians-Universität München (LMU)":"Tyskland",
+      "ETH Zürich":"Sveits",
+      "EPFL":"Sveits",
+      "KTH Royal Institute of Technology":"Sverige",
+      "Chalmers University of Technology":"Sverige",
+      "DTU - Technical University of Denmark":"Danmark",
+      "Delft University of Technology (TU Delft)":"Nederland",
+      "Aalto University":"Finland",
+      "TU Wien":"Østerrike",
+      "Politecnico di Milano":"Italia",
+      "Universidad Politécnica de Madrid":"Spania",
+      "University of California, Berkeley":"USA",
+      "University of British Columbia (UBC)":"Canada",
+      "Nanyang Technological University (NTU)":"Singapore",
+      "National University of Singapore (NUS)":"Singapore",
+      "The University of Tokyo":"Japan",
+      "Trinity College Dublin":"Irland",
+      "University of Edinburgh":"Storbritannia",
+      "University of New South Wales (UNSW)":"Australia"
+    };
+
+    // Landliste (norsk) – kort, men kan utvides
+    const countries = [
+      "Australia","Canada","Danmark","Finland","Frankrike","Irland","Italia","Japan","Nederland",
+      "Norge","Singapore","Spania","Storbritannia","Sveits","Sverige","Sør-Korea","Tyskland","USA","\u00d8sterrike"
+    ];
+
+    // ====== DOM helpers ======
+    const $ = sel => document.querySelector(sel);
+    const el = (tag, attrs={}, ...children) => {
+      const n = document.createElement(tag);
+      Object.entries(attrs).forEach(([k,v]) => {
+        if(k === 'class') n.className = v;
+        else if(k.startsWith('on') && typeof v === 'function') n.addEventListener(k.slice(2), v);
+        else if(v !== null && v !== undefined) n.setAttribute(k, v);
+      });
+      children.forEach(c => n.append(c));
+      return n;
+    };
+    const toast = (msg, kind='ok') => {
+      const t = $('#toast');
+      t.textContent = msg;
+      t.style.borderColor = kind==='ok' ? 'color-mix(in lab, var(--ok), #fff 60%)' : 'color-mix(in lab, #B91C1C, #fff 60%)';
+      t.classList.add('show');
+      setTimeout(()=>t.classList.remove('show'), 2800);
+    };
+
+    // ====== Lagring ======
+    const loadUser = () => JSON.parse(localStorage.getItem(LS.user) || 'null');
+    const saveUser = (u) => localStorage.setItem(LS.user, JSON.stringify(u));
+    const loadEntries = () => JSON.parse(localStorage.getItem(LS.entries) || '[]');
+    const saveEntries = (arr) => localStorage.setItem(LS.entries, JSON.stringify(arr));
+    const loadUniMap = () => JSON.parse(localStorage.getItem(LS.uniMap) || 'null') || seedUniMap;
+    const saveUniMap = (m) => localStorage.setItem(LS.uniMap, JSON.stringify(m));
+
+    // ====== Init UI ======
+    const state = {
+      user: loadUser(),
+      uniMap: loadUniMap(),
+      entries: loadEntries(),
+      filtered: []
+    };
+
+    function initUI(){
+      // auth gate
+      if(state.user){
+        $('#authCard').hidden = true;
+        $('#app').hidden = false;
+        $('#userBadge').textContent = state.user.fullName || state.user.email || 'Innlogget';
+      } else {
+        $('#authCard').hidden = false;
+        $('#app').hidden = true;
+        $('#userBadge').textContent = 'Ikke innlogget';
+      }
+
+      // Land-select
+      const cSel = $('#country');
+      cSel.innerHTML = countries.map(c=>`<option value="${c}">${c}</option>`).join('');
+
+      // Filter dropdowns
+      const fCountry = $('#filterCountry');
+      const fUni = $('#filterUni');
+      // bevar "Alle ..."
+      const uniSet = new Set(Object.keys(state.uniMap).concat(state.entries.map(e=>e.university)));
+      fUni.innerHTML = `<option value="">Alle universiteter</option>` + [...uniSet].sort().map(u=>`<option>${u}</option>`).join('');
+      fCountry.innerHTML = `<option value="">Alle land</option>` + [...new Set(countries.concat(state.entries.map(e=>e.country)))].sort().map(c=>`<option>${c}</option>`).join('');
+
+      // Datalist for universiteter
+      const dl = $('#uniList');
+      dl.innerHTML = [...uniSet].sort().map(u => `<option value="${u}">`).join('');
+
+      // Kontakt default
+      const contact = $('#contact');
+      contact.value = state.user?.email || '';
+
+      // Anonym-valg toggle
+      onAnonChange();
+
+      // Render liste
+      applyFiltersAndRender();
+    }
+
+    // ====== Hendelser ======
+    // Auth
+    $('#authForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const fullName = $('#fullName').value.trim();
+      const email = $('#email').value.trim();
+      if(!fullName || !email) return;
+      state.user = {fullName, email};
+      saveUser(state.user);
+      initUI();
+      toast('Innlogget – klar til å bidra!');
+    });
+    $('#skipLogin').addEventListener('click', ()=>{
+      state.user = { fullName: 'Gjest', email: '' };
+      saveUser(state.user);
+      initUI();
+      toast('Fortsetter som gjest. Du kan logge inn senere.');
+    });
+
+    // Navigasjon
+    $('#navProfile').addEventListener('click', ()=>{
+      $('#authCard').hidden = false;
+      $('#app').hidden = true;
+    });
+    $('#navAdd').addEventListener('click', ()=>{
+      $('#authCard').hidden = true;
+      $('#app').hidden = false;
+      document.getElementById('pane-add').scrollIntoView({behavior:'smooth',block:'start'});
+    });
+    $('#navBrowse').addEventListener('click', ()=>{
+      $('#authCard').hidden = true;
+      $('#app').hidden = false;
+      document.getElementById('pane-browse').scrollIntoView({behavior:'smooth',block:'start'});
+    });
+
+    // Automatisk land fra universitet
+    $('#uni').addEventListener('input', onUniInput);
+    function onUniInput(){
+      const u = $('#uni').value.trim();
+      const known = state.uniMap[u];
+      const cSel = $('#country');
+      if(known){
+        cSel.value = known;
+        cSel.disabled = true;
+        $('#countryHint').textContent = 'Land er låst til kjent verdi for dette universitetet.';
+      }else{
+        cSel.disabled = false;
+        $('#countryHint').textContent = 'Ukjent universitet – velg land manuelt, så husker vi det videre.';
+      }
+    }
+
+    // Anonym toggle
+    $('#anonymous').addEventListener('change', onAnonChange);
+    function onAnonChange(){
+      const anon = $('#anonymous').value === 'yes';
+      const wrap = $('#contactWrap');
+      wrap.style.opacity = anon ? .45 : 1;
+      $('#contact').disabled = anon;
+    }
+
+    // Innsending av erfaring
+    $('#addForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const university = $('#uni').value.trim();
+      const country = $('#country').value.trim();
+      const semester = $('#semester').value.trim();
+      const ntnuCode = $('#ntnuCode').value.trim().toUpperCase();
+      const ntnuName = $('#ntnuName').value.trim();
+      const foreignCode = $('#foreignCode').value.trim();
+      const foreignName = $('#foreignName').value.trim();
+      const anonymous = $('#anonymous').value === 'yes';
+      const contact = $('#contact').value.trim();
+      const notes = $('#notes').value.trim();
+
+      // Validering
+      if(!university || !country || !ntnuCode || !ntnuName || !foreignCode || !foreignName){
+        toast('Fyll ut alle påkrevde felt.', 'err'); return;
+      }
+      if(!anonymous && !contact){
+        toast('Oppgi e-post eller velg anonym deling.', 'err'); return;
+      }
+
+      // Oppdater unimap hvis ukjent
+      if(!state.uniMap[university]){
+        state.uniMap[university] = country;
+        saveUniMap(state.uniMap);
+      }
+
+      const entry = {
+        id: crypto.randomUUID(),
+        university, country, semester,
+        ntnuCode, ntnuName,
+        foreignCode, foreignName,
+        notes,
+        contributor: {
+          name: anonymous ? 'Anonym' : (state.user?.fullName || 'Ukjent'),
+          email: anonymous ? '' : contact
+        },
+        createdAt: new Date().toISOString()
+      };
+      state.entries.unshift(entry);
+      saveEntries(state.entries);
+
+      // Nullstill skjema delvis
+      $('#addForm').reset();
+      $('#contact').value = state.user?.email || '';
+      $('#country').disabled = false;
+      $('#countryHint').textContent = 'Velges automatisk når universitet gjenkjennes.';
+      initUI();
+      toast('Erfaring publisert!');
+    });
+
+    $('#resetBtn').addEventListener('click', ()=>{
+      setTimeout(()=>{ // etter reset
+        $('#contact').value = state.user?.email || '';
+        $('#country').disabled = false;
+        $('#countryHint').textContent = 'Velges automatisk når universitet gjenkjennes.';
+      });
+    });
+
+    // Filtre & søk
+    $('#q').addEventListener('input', applyFiltersAndRender);
+    $('#filterCountry').addEventListener('change', applyFiltersAndRender);
+    $('#filterUni').addEventListener('change', applyFiltersAndRender);
+
+    function applyFiltersAndRender(){
+      const q = $('#q').value.trim().toLowerCase();
+      const fc = $('#filterCountry').value;
+      const fu = $('#filterUni').value;
+      const rows = state.entries.filter(e=>{
+        const hit = [
+          e.university, e.country, e.ntnuCode, e.ntnuName, e.foreignCode, e.foreignName, e.semester, e.contributor?.name
+        ].join(' ').toLowerCase().includes(q);
+        const cOk = !fc || e.country === fc;
+        const uOk = !fu || e.university === fu;
+        return hit && cOk && uOk;
+      });
+      state.filtered = rows;
+      renderTable();
+    }
+
+    function renderTable(){
+      const tbody = $('#tbody');
+      tbody.innerHTML = '';
+      const rows = state.filtered.length ? state.filtered : state.entries;
+      if(rows.length === 0){
+        $('#empty').hidden = false;
+        $('#table').style.display = 'none';
+        return;
+      }
+      $('#empty').hidden = true;
+      $('#table').style.display = 'table';
+      rows.forEach(e=>{
+        const who = e.contributor?.email
+          ? el('a',{href:`mailto:${e.contributor.email}`}, e.contributor.name)
+          : el('span',{}, e.contributor?.name || 'Anonym');
+        const tr = el('tr',{},
+          el('td',{}, e.university),
+          el('td',{}, e.country),
+          el('td',{},
+            el('div',{}, el('strong',{}, e.ntnuCode),' – ', e.ntnuName),
+          ),
+          el('td',{},
+            el('div',{}, el('strong',{}, e.foreignCode),' – ', e.foreignName),
+            e.notes ? el('div',{class:'hint'}, e.notes) : ''
+          ),
+          el('td',{}, e.semester || ''),
+          el('td',{}, who)
+        );
+        tbody.append(tr);
+      });
+    }
+
+    // Eksporter / Tøm
+    $('#exportBtn').addEventListener('click', ()=>{
+      const data = {
+        exportedAt: new Date().toISOString(),
+        user: state.user,
+        entries: state.entries,
+        uniMap: state.uniMap
+      };
+      const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = el('a',{href:url,download:'ntnutveksling-data.json'});
+      document.body.append(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    $('#clearBtn').addEventListener('click', ()=>{
+      if(confirm('Dette sletter alle lokale data (profiler, innslag, universiteter). Fortsette?')){
+        localStorage.removeItem(LS.user);
+        localStorage.removeItem(LS.entries);
+        localStorage.removeItem(LS.uniMap);
+        Object.assign(state, {user:null, entries:[], uniMap:seedUniMap, filtered:[]});
+        initUI();
+        $('#authCard').hidden = false;
+        toast('Lokale data er slettet.', 'err');
+      }
+    });
+
+    // Første init
+    initUI();
+  </script>
+</body>
+</html>
